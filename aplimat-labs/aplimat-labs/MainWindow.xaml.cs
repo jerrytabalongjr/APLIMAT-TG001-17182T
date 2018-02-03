@@ -20,8 +20,17 @@ using System.Windows.Shapes;
 
 namespace aplimat_labs
 {
+
+    /// <summary>
+    /// Interaction logic for MainWindow.xml
+    /// </summary>
     public partial class MainWindow : Window
     {
+        //public MainWindow()
+        //{
+        //    InitializeComponent();
+        //    this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+        //}
 
         private const float LINE_SMOOTHNESS = 0.02f;
         private const float GRAPH_LIMIT = 15;
@@ -30,63 +39,65 @@ namespace aplimat_labs
         private Vector3 a = new Vector3(15, 15, 0);
         private Vector3 b = new Vector3(-2, 10, 0);
 
-        //private const int HEADS = 0;
-        //private const int TAIILS = 1;
+        private Randomizer rng = new Randomizer(-20, 20);
+        private Randomizer rng2 = new Randomizer(1, 3);
 
-        private Randomizer rng = new Randomizer(0, 7);
+        private List<CubeMesh> myCubes = new List<CubeMesh>();
 
-        public MainWindow()
-        {
-            InitializeComponent();
-            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
-
-            //Vector3 c = a + b;
-            //Console.WriteLine("Vector c values: x:" + c.x + " y:" + c.y + " z:" + c.z);
-
-            //Vector3 d = a - b;
-            //Console.WriteLine("Vector d values: x:" + d.x + " y:" + d.y + " z:" + d.z);
-        }
-        private CubeMesh myCube = new CubeMesh(2, 1, 0);
         private CubeMesh myCube2 = new CubeMesh(3, 2, 0);
+
+        private int counter = 0;
+
         private void OpenGLControl_OpenGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
             OpenGL gl = args.OpenGL;
+
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
+
             gl.LoadIdentity();
+            gl.Translate(0.0f, 0.0f, -100.0f);
 
-            gl.Translate(0.0f, 0.0f, -40.0f);
-            
-            myCube.Draw(gl);
+            CubeMesh myCube = new CubeMesh();
+            myCube.Position = new Vector3(Gaussian.Generate(0, 15), rng.GenerateInt(), rng.GenerateInt());
+            myCubes.Add(myCube);
 
-            switch (rng.Generate())
+
+            foreach (var cube in myCubes)
             {
-                case 0://South
-                    myCube.Position += new Vector3(0.0f, -0.1f, 0.0f);
-                    break;
-                case 1://North
-                    myCube.Position += new Vector3(0.0f, 0.1f, 0.0f);
-                    break;
-                case 2://West
-                    myCube.Position += new Vector3(-0.1f, 0.0f, 0.0f);
-                    break;
-                case 3://East
-                    myCube.Position += new Vector3(0.1f, 0.0f, 0.0f);
-                    break;
-                case 4://NorthEast
-                    myCube.Position += new Vector3(0.1f, 0.1f, 0.0f);
-                    break;
-                case 5://SouthEast
-                    myCube.Position += new Vector3(0.1f, -0.1f, 0.0f);
-                    break;
-                case 6://NorthWest
-                    myCube.Position += new Vector3(-0.1f, 0.1f, 0.0f);
-                    break;
-                case 7://SouthEast
-                    myCube.Position += new Vector3(-0.1f, -0.1f, 0.0f);
-                    break;
+                cube.Draw(gl, rng2.GenerateInt());
+                counter++;
+                
             }
-            
-         
+
+            //switch (rng.GenerateInt())
+            //{
+            //    case 0://South
+            //        myCube.Position += new Vector3(0.0f, -0.1f, 0.0f);
+            //        break;
+            //    case 1://North
+            //        myCube.Position += new Vector3(0.0f, 0.1f, 0.0f);
+            //        break;
+            //    case 2://West
+            //        myCube.Position += new Vector3(-0.1f, 0.0f, 0.0f);
+            //        break;
+            //    case 3://East
+            //        myCube.Position += new Vector3(0.1f, 0.0f, 0.0f);
+            //        break;
+            //    case 4://NorthEast
+            //        myCube.Position += new Vector3(0.1f, 0.1f, 0.0f);
+            //        break;
+            //    case 5://SouthEast
+            //        myCube.Position += new Vector3(0.1f, -0.1f, 0.0f);
+            //        break;
+            //    case 6://NorthWest
+            //        myCube.Position += new Vector3(-0.1f, 0.1f, 0.0f);
+            //        break;
+            //    case 7://SouthEast
+            //        myCube.Position += new Vector3(-0.1f, -0.1f, 0.0f);
+            //        break;
+            //}
+
+
 
             //gl.Translate(0.0f, 0.0f, -40.0f);
             ////gl.Color(0, 1, 0);
@@ -98,121 +109,103 @@ namespace aplimat_labs
         }
         
 
-        private void DrawCartesianPlane(OpenGL gl)
-        {
+        //private void DrawCartesianPlane(OpenGL gl)
+        //{
 
-            //draw y-axis
-            gl.Begin(OpenGL.GL_LINE_STRIP);
+        //    //draw y-axis
+        //    gl.Begin(OpenGL.GL_LINE_STRIP);
 
-            gl.Color(1.0f, 0.0f, 1.0f);
-            gl.Vertex(0, -GRAPH_LIMIT, 0);
-            gl.Vertex(0, GRAPH_LIMIT, 0);
-            gl.End();
+        //    gl.Color(1.0f, 0.0f, 1.0f);
+        //    gl.Vertex(0, -GRAPH_LIMIT, 0);
+        //    gl.Vertex(0, GRAPH_LIMIT, 0);
+        //    gl.End();
 
-            //draw x-axis
-            gl.Begin(OpenGL.GL_LINE_STRIP);
-            gl.Vertex(-GRAPH_LIMIT, 0, 0);
-            gl.Vertex(GRAPH_LIMIT, 0, 0);
-            gl.End();
+        //    //draw x-axis
+        //    gl.Begin(OpenGL.GL_LINE_STRIP);
+        //    gl.Vertex(-GRAPH_LIMIT, 0, 0);
+        //    gl.Vertex(GRAPH_LIMIT, 0, 0);
+        //    gl.End();
 
-            //draw unit lines
-            for (int i = -15; i <= 15; i++)
-            {
-                gl.Begin(OpenGL.GL_LINE_STRIP);
-                gl.Vertex(-0.2f, i, 0);
-                gl.Vertex(0.2f, i, 0);
-                gl.End();
+        //    //draw unit lines
+        //    for (int i = -15; i <= 15; i++)
+        //    {
+        //        gl.Begin(OpenGL.GL_LINE_STRIP);
+        //        gl.Vertex(-0.2f, i, 0);
+        //        gl.Vertex(0.2f, i, 0);
+        //        gl.End();
 
-                gl.Begin(OpenGL.GL_LINE_STRIP);
-                gl.Vertex(i, -0.2f, 0);
-                gl.Vertex(i, 0.2f, 0);
-                gl.End();
-            }
-        }
+        //        gl.Begin(OpenGL.GL_LINE_STRIP);
+        //        gl.Vertex(i, -0.2f, 0);
+        //        gl.Vertex(i, 0.2f, 0);
+        //        gl.End();
+        //    }
+        //}
 
-        private void DrawPoint(OpenGL gl, float x, float y)
-        {
-            gl.PointSize(5.0f);
-            gl.Begin(OpenGL.GL_POINTS);
-            gl.Vertex(x, y);
-            gl.End();
-        }
+        //private void DrawPoint(OpenGL gl, float x, float y)
+        //{
+        //    gl.PointSize(5.0f);
+        //    gl.Begin(OpenGL.GL_POINTS);
+        //    gl.Vertex(x, y);
+        //    gl.End();
+        //}
 
-        private void DrawLinearFunction(OpenGL gl)
-        {
-            /*
-             * f(x) = x + 2;
-             * Let x be 4, then y = 6 (4, 6)
-             * Let x be -5, then y = -3 (-5, -3)
-             * */
-            gl.PointSize(2.0f);
-            gl.Begin(OpenGL.GL_POINTS);
-            for (float x = -(GRAPH_LIMIT - 5); x <= (GRAPH_LIMIT - 5); x+=LINE_SMOOTHNESS)
-            {
-                gl.Vertex(x, x + 2);
-            }
-            gl.End();
+        //private void DrawLinearFunction(OpenGL gl)
+        //{
+        //    /*
+        //     * f(x) = x + 2;
+        //     * Let x be 4, then y = 6 (4, 6)
+        //     * Let x be -5, then y = -3 (-5, -3)
+        //     * */
+        //    gl.PointSize(2.0f);
+        //    gl.Begin(OpenGL.GL_POINTS);
+        //    for (float x = -(GRAPH_LIMIT - 5); x <= (GRAPH_LIMIT - 5); x+=LINE_SMOOTHNESS)
+        //    {
+        //        gl.Vertex(x, x + 2);
+        //    }
+        //    gl.End();
 
-            DrawText(gl, "f(x) = x + 2", 500, 400);
+        //    DrawText(gl, "f(x) = x + 2", 500, 400);
 
-        }
+        //}
 
 
-        private void DrawQuadraticFunction(OpenGL gl)
-        {
-            /*
-             * f(x) = x^2 + 2x - 5;
-             * Let x be 2, then y = 3
-             * Let x be -1, then y = -6
-             */
+        //private void DrawQuadraticFunction(OpenGL gl)
+        //{
+        //    gl.PointSize(2.0f);
+        //    gl.Begin(OpenGL.GL_POINTS);
+        //    for (float x = -(GRAPH_LIMIT - 5); x <= (GRAPH_LIMIT - 5); x += LINE_SMOOTHNESS)
+        //    {
+        //        gl.Vertex(x, Math.Pow(x, 2));
+        //    }
+        //    gl.End();
 
-            //gl.PointSize(1.0f);
-            //gl.Begin(OpenGL.GL_POINTS);
-            //for (float x = -(GRAPH_LIMIT - 5); x <= (GRAPH_LIMIT - 5); x += LINE_SMOOTHNESS)
-            //{
-            //    gl.Vertex(x, Math.Pow(x, 2) + (2 * x) - 5);
-            //}
-            //gl.End();
+        //    DrawText(gl, "f(x) = x ^ 2", 360, 380);
 
-            /*
-             * f(x) = x^2
-             * 
-             */
-            gl.PointSize(2.0f);
-            gl.Begin(OpenGL.GL_POINTS);
-            for (float x = -(GRAPH_LIMIT - 5); x <= (GRAPH_LIMIT - 5); x += LINE_SMOOTHNESS)
-            {
-                gl.Vertex(x, Math.Pow(x, 2));
-            }
-            gl.End();
+        //}
 
-            DrawText(gl, "f(x) = x ^ 2", 360, 380);
+        //private void DrawCircle(OpenGL gl)
+        //{
+        //    float radius = 3.0f;
 
-        }
+        //    gl.PointSize(2.0f);
+        //    gl.Begin(OpenGL.GL_POINTS);
+        //    for (int i = 0; i <= TOTAL_CIRCLE_ANGLE; i++)
+        //    {
+        //        gl.Vertex(Math.Cos(i) * radius, Math.Sin(i) * radius);
+        //    }
+        //    gl.End();
 
-        private void DrawCircle(OpenGL gl)
-        {
-            float radius = 3.0f;
+        //    DrawText(gl, "(cos(x), sin(x))", 350, 200);
+        //}
 
-            gl.PointSize(2.0f);
-            gl.Begin(OpenGL.GL_POINTS);
-            for (int i = 0; i <= TOTAL_CIRCLE_ANGLE; i++)
-            {
-                gl.Vertex(Math.Cos(i) * radius, Math.Sin(i) * radius);
-            }
-            gl.End();
-
-            DrawText(gl, "(cos(x), sin(x))", 350, 200);
-        }
-
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.W:
-                    break;
-            }
-        } 
+        //private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    switch (e.Key)
+        //    {
+        //        case Key.W:
+        //            break;
+        //    }
+        //} 
         #region opengl init
         private void OpenGLControl_OpenGLInitialized(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
@@ -227,6 +220,7 @@ namespace aplimat_labs
             float[] light0specular = new float[] { 0.8f, 0.8f, 0.8f, 1.0f };
 
             float[] lmodel_ambient = new float[] { 0.2f, 0.2f, 0.2f, 1.0f };
+
             gl.LightModel(OpenGL.GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
 
             gl.LightModel(OpenGL.GL_LIGHT_MODEL_AMBIENT, global_ambient);
@@ -234,8 +228,14 @@ namespace aplimat_labs
             gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_AMBIENT, light0ambient);
             gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_DIFFUSE, light0diffuse);
             gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_SPECULAR, light0specular);
+
+            gl.Color(0,1,1);
+
             gl.Enable(OpenGL.GL_LIGHTING);
             gl.Enable(OpenGL.GL_LIGHT0);
+
+
+
 
             gl.ShadeModel(OpenGL.GL_SMOOTH);
 
