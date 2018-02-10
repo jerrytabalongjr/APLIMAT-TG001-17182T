@@ -58,7 +58,7 @@ namespace aplimat_labs
 
             if (myCube.Position.y < -10)
                 Velocity.y = 1;
-
+            //Change
 
         }
         
