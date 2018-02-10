@@ -29,10 +29,17 @@ namespace aplimat_labs
         public MainWindow()
         {
             InitializeComponent();
+            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+            myVector = a - b;
         }
 
         private CubeMesh myCube = new CubeMesh();
         private Vector3 Velocity = new Vector3(1, 1, 0);
+
+        private Vector3 myVector = new Vector3();
+
+        private Vector3 a = new Vector3(0, 0, 0);
+        private Vector3 b = new Vector3(5, 7, 0);
 
         private void OpenGLControl_OpenGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
@@ -40,28 +47,75 @@ namespace aplimat_labs
             this.Title = "Vectors";
 
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
-            
-                        
+                                   
             gl.LoadIdentity();
             gl.Translate(0.0f, 0.0f, -40.0f);
 
-            myCube.Draw(gl);
-            myCube.Position += Velocity;
-            if (myCube.Position.x > 25)
-                Velocity.x = -1;
 
-            if (myCube.Position.x < -25)
-                Velocity.x = 1;
+            gl.LineWidth(100.0f);
+            gl.Color(0.4f, 0.0f, 0.0f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(0, 0);
+            gl.Vertex(b.x, b.y);
+            gl.End();
 
-            if (myCube.Position.y > 10)
-                Velocity.y = -1;
+            gl.LineWidth(0.5f);
+            gl.Color(1.0f, 0.0f, 0.0f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(0, 0);
+            gl.Vertex(b.x, b.y);
+            gl.End();
 
-            if (myCube.Position.y < -10)
-                Velocity.y = 1;
-            //Change
+            gl.LineWidth(100.0f);
+            gl.Color(0.4f, 0.4f, 0.4f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(0, 0);
+            gl.Vertex(b.x/10, b.y/10);
+            gl.End();
+
+            gl.LineWidth(100.0f);
+            gl.Color(0.4f, 0.0f, 0.0f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(0, 0);
+            gl.Vertex(-b.x, -b.y);
+            gl.End();
+
+            gl.LineWidth(0.5f);
+            gl.Color(1.0f, 0.0f, 0.0f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(0, 0);
+            gl.Vertex(-b.x, -b.y);
+            gl.End();
+
+            gl.LineWidth(100.0f);
+            gl.Color(0.4f, 0.4f, 0.4f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(0, 0);
+            gl.Vertex((-b.x) / 10, -(b.y) / 10);
+            gl.End();
+
+            gl.DrawText(0, 0, 1, 1, 1, "Arial", 15, "myVector magnitude is " + myVector.GetMagnitude());
 
         }
-        
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.W:
+                    b.y += 1;
+                    break;
+                case Key.S:
+                    b.y -= 1;
+                    break;
+                case Key.A:
+                    b.x -= 1;
+                    break;
+                case Key.D:
+                    b.x += 1;
+                    break;
+            }
+        }
 
         //private void DrawCartesianPlane(OpenGL gl)
         //{
@@ -185,9 +239,9 @@ namespace aplimat_labs
 
             gl.Color(0,1,1);
 
-            gl.Enable(OpenGL.GL_LIGHTING);
-            gl.Enable(OpenGL.GL_LIGHT0);
-
+            gl.Disable(OpenGL.GL_LIGHTING);
+            gl.Disable(OpenGL.GL_LIGHT0);
+            
 
 
 
