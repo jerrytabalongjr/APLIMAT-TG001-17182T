@@ -10,7 +10,6 @@ namespace aplimat_labs.Models
 {
     public class CubeMesh
     {
-        public double Cubex;
 
         public Vector3 Position;
 
@@ -29,50 +28,45 @@ namespace aplimat_labs.Models
             this.Position = new Vector3(x, y, z);
         }
 
-        public void Draw(OpenGL gl, double Cubex)
+        public void Draw(OpenGL gl)
         {
             
             gl.Begin(OpenGL.GL_TRIANGLE_STRIP);
             //FrontFace
-            gl.Vertex(this.Position.x - Cubex, this.Position.y + Cubex, this.Position.z + Cubex);
-            gl.Vertex(this.Position.x - Cubex, this.Position.y - Cubex, this.Position.z + Cubex);
-            gl.Vertex(this.Position.x + Cubex, this.Position.y + Cubex, this.Position.z + Cubex);
-            gl.Vertex(this.Position.x + Cubex, this.Position.y - Cubex, this.Position.z + Cubex);
+            gl.Vertex(this.Position.x - 0.5f, this.Position.y + 0.5f, this.Position.z + 0.5f);
+            gl.Vertex(this.Position.x - 0.5f, this.Position.y - 0.5f, this.Position.z + 0.5f);
+            gl.Vertex(this.Position.x + 0.5f, this.Position.y + 0.5f, this.Position.z + 0.5f);
+            gl.Vertex(this.Position.x + 0.5f, this.Position.y - 0.5f, this.Position.z + 0.5f);
 
             //RightFace
-            gl.Vertex(this.Position.x + Cubex, this.Position.y + Cubex, this.Position.z - Cubex);
-            gl.Vertex(this.Position.x + Cubex, this.Position.y - Cubex, this.Position.z - Cubex);
+            gl.Vertex(this.Position.x + 0.5f, this.Position.y + 0.5f, this.Position.z - 0.5f);
+            gl.Vertex(this.Position.x + 0.5f, this.Position.y - 0.5f, this.Position.z - 0.5f);
 
             //BackFace
-            gl.Vertex(this.Position.x - Cubex, this.Position.y + Cubex, this.Position.z - Cubex);
-            gl.Vertex(this.Position.x - Cubex, this.Position.y - Cubex, this.Position.z - Cubex);
+            gl.Vertex(this.Position.x - 0.5f, this.Position.y + 0.5f, this.Position.z - 0.5f);
+            gl.Vertex(this.Position.x - 0.5f, this.Position.y - 0.5f, this.Position.z - 0.5f);
 
             //LeftFace
-            gl.Vertex(this.Position.x - Cubex, this.Position.y + Cubex, this.Position.z + Cubex);
-            gl.Vertex(this.Position.x - Cubex, this.Position.y - Cubex, this.Position.z + Cubex);
+            gl.Vertex(this.Position.x - 0.5f, this.Position.y + 0.5f, this.Position.z + 0.5f);
+            gl.Vertex(this.Position.x - 0.5f, this.Position.y - 0.5f, this.Position.z + 0.5f);
             gl.End();
 
             //TopFace
             gl.Begin(OpenGL.GL_TRIANGLE_STRIP);
-            gl.Vertex(this.Position.x - Cubex, this.Position.y + Cubex, this.Position.z + Cubex);
-            gl.Vertex(this.Position.x + Cubex, this.Position.y + Cubex, this.Position.z + Cubex);
-            gl.Vertex(this.Position.x - Cubex, this.Position.y + Cubex, this.Position.z - Cubex);
-            gl.Vertex(this.Position.x + Cubex, this.Position.y + Cubex, this.Position.z - Cubex);
+            gl.Vertex(this.Position.x - 0.5f, this.Position.y + 0.5f, this.Position.z + 0.5f);
+            gl.Vertex(this.Position.x + 0.5f, this.Position.y + 0.5f, this.Position.z + 0.5f);
+            gl.Vertex(this.Position.x - 0.5f, this.Position.y + 0.5f, this.Position.z - 0.5f);
+            gl.Vertex(this.Position.x + 0.5f, this.Position.y + 0.5f, this.Position.z - 0.5f);
             gl.End();
 
             //BotoomFace
             gl.Begin(OpenGL.GL_TRIANGLE_STRIP);
-            gl.Vertex(this.Position.x - Cubex, this.Position.y - Cubex, this.Position.z + Cubex);
-            gl.Vertex(this.Position.x + Cubex, this.Position.y - Cubex, this.Position.z + Cubex);
-            gl.Vertex(this.Position.x - Cubex, this.Position.y - Cubex, this.Position.z - Cubex);
-            gl.Vertex(this.Position.x + Cubex, this.Position.y - Cubex, this.Position.z - Cubex);
+            gl.Vertex(this.Position.x - 0.5f, this.Position.y - 0.5f, this.Position.z + 0.5f);
+            gl.Vertex(this.Position.x + 0.5f, this.Position.y - 0.5f, this.Position.z + 0.5f);
+            gl.Vertex(this.Position.x - 0.5f, this.Position.y - 0.5f, this.Position.z - 0.5f);
+            gl.Vertex(this.Position.x + 0.5f, this.Position.y - 0.5f, this.Position.z - 0.5f);
             gl.End();
 
-        }
-
-        internal void Draw(OpenGL gl)
-        {
-            throw new NotImplementedException();
         }
     }
 }

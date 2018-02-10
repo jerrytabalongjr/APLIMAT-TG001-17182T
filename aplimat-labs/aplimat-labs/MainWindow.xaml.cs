@@ -26,86 +26,40 @@ namespace aplimat_labs
     /// </summary>
     public partial class MainWindow : Window
     {
-        //public MainWindow()
-        //{
-        //    InitializeComponent();
-        //    this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
-        //}
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
 
-        private const float LINE_SMOOTHNESS = 0.02f;
-        private const float GRAPH_LIMIT = 15;
-        private const int TOTAL_CIRCLE_ANGLE = 360;
-
-        private Vector3 a = new Vector3(15, 15, 0);
-        private Vector3 b = new Vector3(-2, 10, 0);
-
-        private Randomizer rng = new Randomizer(-20, 20);
-        private Randomizer rng2 = new Randomizer(1, 3);
-
-        private List<CubeMesh> myCubes = new List<CubeMesh>();
-
-        private CubeMesh myCube2 = new CubeMesh(3, 2, 0);
-
-        private int counter = 0;
+        private CubeMesh myCube = new CubeMesh();
+        private Vector3 Velocity = new Vector3(1, 1, 0);
 
         private void OpenGLControl_OpenGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
             OpenGL gl = args.OpenGL;
+            this.Title = "Vectors";
 
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
-
+            
+                        
             gl.LoadIdentity();
-            gl.Translate(0.0f, 0.0f, -100.0f);
+            gl.Translate(0.0f, 0.0f, -40.0f);
 
-            CubeMesh myCube = new CubeMesh();
-            myCube.Position = new Vector3(Gaussian.Generate(0, 15), rng.GenerateInt(), rng.GenerateInt());
-            myCubes.Add(myCube);
+            myCube.Draw(gl);
+            myCube.Position += Velocity;
+            if (myCube.Position.x > 25)
+                Velocity.x = -1;
 
+            if (myCube.Position.x < -25)
+                Velocity.x = 1;
 
-            foreach (var cube in myCubes)
-            {
-                cube.Draw(gl, rng2.GenerateInt());
-                counter++;
-                
-            }
+            if (myCube.Position.y > 10)
+                Velocity.y = -1;
 
-            //switch (rng.GenerateInt())
-            //{
-            //    case 0://South
-            //        myCube.Position += new Vector3(0.0f, -0.1f, 0.0f);
-            //        break;
-            //    case 1://North
-            //        myCube.Position += new Vector3(0.0f, 0.1f, 0.0f);
-            //        break;
-            //    case 2://West
-            //        myCube.Position += new Vector3(-0.1f, 0.0f, 0.0f);
-            //        break;
-            //    case 3://East
-            //        myCube.Position += new Vector3(0.1f, 0.0f, 0.0f);
-            //        break;
-            //    case 4://NorthEast
-            //        myCube.Position += new Vector3(0.1f, 0.1f, 0.0f);
-            //        break;
-            //    case 5://SouthEast
-            //        myCube.Position += new Vector3(0.1f, -0.1f, 0.0f);
-            //        break;
-            //    case 6://NorthWest
-            //        myCube.Position += new Vector3(-0.1f, 0.1f, 0.0f);
-            //        break;
-            //    case 7://SouthEast
-            //        myCube.Position += new Vector3(-0.1f, -0.1f, 0.0f);
-            //        break;
-            //}
+            if (myCube.Position.y < -10)
+                Velocity.y = 1;
 
 
-
-            //gl.Translate(0.0f, 0.0f, -40.0f);
-            ////gl.Color(0, 1, 0);
-            //DrawCartesianPlane(gl); //draw cartesian plane with unit lines
-            //DrawPoint(gl, 1, 1); //draw a point with coordinates (1, 1)
-            //DrawLinearFunction(gl);
-            //DrawQuadraticFunction(gl);
-            //DrawCircle(gl);
         }
         
 
