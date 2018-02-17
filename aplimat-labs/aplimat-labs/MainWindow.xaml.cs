@@ -30,91 +30,49 @@ namespace aplimat_labs
         {
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
-            myVector = a - b;
         }
 
-        private CubeMesh myCube = new CubeMesh();
-        private Vector3 Velocity = new Vector3(1, 1, 0);
+        private CubeMesh mover = new CubeMesh(-25, 0, 0);
+        private Vector3 acceleration = new Vector3(0.03f, 0, 0);
 
-        private Vector3 myVector = new Vector3();
-
-        private Vector3 a = new Vector3(0, 0, 0);
-        private Vector3 b = new Vector3(5, 7, 0);
+        private bool reached = false;
 
         private void OpenGLControl_OpenGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
             OpenGL gl = args.OpenGL;
-            this.Title = "Vectors";
 
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
-                                   
+
             gl.LoadIdentity();
             gl.Translate(0.0f, 0.0f, -40.0f);
 
+            mover.Draw(gl);
 
-            gl.LineWidth(100.0f);
-            gl.Color(0.4f, 0.0f, 0.0f);
-            gl.Begin(OpenGL.GL_LINE_STRIP);
-            gl.Vertex(0, 0);
-            gl.Vertex(b.x, b.y);
-            gl.End();
+            if (reached == false)
+            {
+                mover.Velocity += acceleration;
+                mover.Velocity.Clamp(3.0f);
+            }
 
-            gl.LineWidth(0.5f);
-            gl.Color(1.0f, 0.0f, 0.0f);
-            gl.Begin(OpenGL.GL_LINE_STRIP);
-            gl.Vertex(0, 0);
-            gl.Vertex(b.x, b.y);
-            gl.End();
 
-            gl.LineWidth(100.0f);
-            gl.Color(0.4f, 0.4f, 0.4f);
-            gl.Begin(OpenGL.GL_LINE_STRIP);
-            gl.Vertex(0, 0);
-            gl.Vertex(b.x/10, b.y/10);
-            gl.End();
+            if (mover.Position.x > 25.0f) 
+            {
+                mover.Velocity.x = -1.0f;
+                reached = true;
+            }
+            
+            if (reached == true)
+            {
+                mover.Velocity += acceleration;
+                mover.Velocity.Clamp(0.0f);
+            }
 
-            gl.LineWidth(100.0f);
-            gl.Color(0.4f, 0.0f, 0.0f);
-            gl.Begin(OpenGL.GL_LINE_STRIP);
-            gl.Vertex(0, 0);
-            gl.Vertex(-b.x, -b.y);
-            gl.End();
-
-            gl.LineWidth(0.5f);
-            gl.Color(1.0f, 0.0f, 0.0f);
-            gl.Begin(OpenGL.GL_LINE_STRIP);
-            gl.Vertex(0, 0);
-            gl.Vertex(-b.x, -b.y);
-            gl.End();
-
-            gl.LineWidth(100.0f);
-            gl.Color(0.4f, 0.4f, 0.4f);
-            gl.Begin(OpenGL.GL_LINE_STRIP);
-            gl.Vertex(0, 0);
-            gl.Vertex((-b.x) / 10, -(b.y) / 10);
-            gl.End();
-
-            gl.DrawText(0, 0, 1, 1, 1, "Arial", 15, "myVector magnitude is " + myVector.GetMagnitude());
+            gl.DrawText(20, 20, 1, 0, 0, "Arial", 25, mover.Velocity.x + " ");
 
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
-            {
-                case Key.W:
-                    b.y += 1;
-                    break;
-                case Key.S:
-                    b.y -= 1;
-                    break;
-                case Key.A:
-                    b.x -= 1;
-                    break;
-                case Key.D:
-                    b.x += 1;
-                    break;
-            }
         }
 
         //private void DrawCartesianPlane(OpenGL gl)
@@ -239,8 +197,8 @@ namespace aplimat_labs
 
             gl.Color(0,1,1);
 
-            gl.Disable(OpenGL.GL_LIGHTING);
-            gl.Disable(OpenGL.GL_LIGHT0);
+            gl.Enable(OpenGL.GL_LIGHTING);
+            gl.Enable(OpenGL.GL_LIGHT0);
             
 
 
@@ -256,5 +214,10 @@ namespace aplimat_labs
             gl.DrawText(x, y, 1, 1, 1, "Arial", 12, text);
         }
         #endregion
+
+        private void OpenGLControl_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
     }
 }
